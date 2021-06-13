@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela Round">
+
+<html>
+
+    <style>
+        body{
+            background-color: #F6BDD1;
+            text-align: center;
+            font-family: "Varela Round";
+        }
+
+        p{
+            color: #8B575C;
+        }
+
+        h1{
+            color: #8B575C;
+        }
+
+        h2{
+            color: #8B575C;
+        }
+        h3{
+            color: #C98986;
+        }
+
+        button{
+            color: #F4F4F4;
+            background-color: #C98986;
+            font-family: "Varela Round";
+        }
+
+
+
+    </style>
+
+    <script>
+         function generate_nums(){
+            // generate and return winning numbers: 
+             var first = Math.floor((Math.random() * 49) + 1); 
+             var second = Math.floor((Math.random() * 49) + 1);
+             var third = Math.floor((Math.random() * 49) + 1);
+             var fourth = Math.floor((Math.random() * 49) + 1); 
+             var fifth = Math.floor((Math.random() * 49) + 1);
+             var winning_nums = [first, second, third, fourth, fifth];
+             return winning_nums; 
+         }
+         //-------------------------------------------------------------------------------------------------------
+         function sort(array){
+              //sort and return the array in ascending order
+              array.sort(function(a, b){return a-b});
+              return array;
+         }
+        //-------------------------------------------------------------------------------------------------------
+         function check_matches(winning_nums){
+            // check your pick and return number of matches
+             var win_input = document.getElementById("win").value.split(" ");
+             var matches = 0; 
+             // validate your pick input
+             if (win_input.length != 5){ 
+                alert("YOU MUST ENTER 5 NUMBERS (1-48).")
+                document.getElementById("win").value = "";
+                document.getElementById("win").focus();          
+             }
+             else{ 
+                var k, l;
+                invalid = false;
+                for (k = 0; k < win_input.length; k++) {
+                    for( l = 0; l < winning_nums.length; l++){
+                        if (win_input[l] < 1 || win_input[l] > 48){
+                            invalid = true;
+                        }
+                        else if (win_input[l] == winning_nums[k]){
+                            matches++;
+                        }
+                    }     
+                }
+                if (invalid){
+                    alert("YOU MUST ENTER 5 NUMBERS (1-48).")
+                    document.getElementById("win").value = "";
+                    document.getElementById("win").focus(); 
+                }
+            }
+             return matches;
+         }
+         //-------------------------------------------------------------------------------------------------------
+         function generate_lucky(){
+             //generate and return lucky ball number:
+             var lucky = Math.floor((Math.random() * 19) + 1); 
+             return lucky;
+         }
+         //-------------------------------------------------------------------------------------------------------
+         function check_lucky(lucky_num){
+             // now check and return if lucky number matches
+             var match = false;
+             var lucky_input = document.getElementById("lucky").value;
+             // validate lucky ball number input 
+             if (lucky_input.length >= 3 || lucky_input < 1 || lucky_input > 19){
+                alert("MUST ENTER 1 NUMBER (1-18).");
+                document.getElementById("lucky").value = "";
+                document.getElementById("lucky").focus();  
+             }
+             else{
+                 if(lucky_input == lucky_num){
+                     match = true;
+                 }
+             }
+             return match; 
+         }
+         //-------------------------------------------------------------------------------------------------------
+         function payout(num_matches, lucky_matches){
+            // based on number of matches and lucky match display the prize...
+
+            // if no matches and no lucky number
+             if (num_matches == 0 && lucky_matches == false){
+                 document.getElementById("payout").innerHTML = "PRIZE: $0"
+             }
+             // if no matches and lucky number
+             else if (num_matches == 0 && lucky_matches == true){
+                 document.getElementById("payout").innerHTML = "PRIZE: $4";
+             }
+             // if 1 match and no lucky number
+             else if (num_matches == 1 && lucky_matches == false){
+                 document.getElementById("payout").innerHTML = "PRIZE: $0"
+             }
+             // if 1 match and lucky number
+             else if (num_matches == 1 && lucky_matches == true){
+                document.getElementById("payout").innerHTML = "PRIZE: $6";
+             }
+             // if 2 matches and no lucky number
+             else if (num_matches == 2 && lucky_matches == false){
+                document.getElementById("payout").innerHTML = "PRIZE: $3";
+             }
+             // if 2 matches and lucky number
+             else if (num_matches == 2 && lucky_matches == true){
+                document.getElementById("payout").innerHTML = "PRIZE: $25";
+             }
+             // if 3 matches and no lucky number 
+             else if (num_matches == 3 && lucky_matches == false){
+                document.getElementById("payout").innerHTML = "PRIZE: $20";
+             }
+             // if 3 matches and lucky number
+             else if (num_matches == 3 && lucky_matches == true){
+                document.getElementById("payout").innerHTML = "PRIZE: $150";
+             }
+             // if 4 matches and no lucky number
+             else if (num_matches == 4 && lucky_matches == false){
+                document.getElementById("payout").innerHTML = "PRIZE: $200";
+             }
+             // if 4 matches and lucky number
+             else if (num_matches == 4 && lucky_matches == true){
+                document.getElementById("payout").innerHTML = "PRIZE: $5,000";
+             }
+             // if 5 matches and no lucky number
+             else if (num_matches == 5 && lucky_matches == false){
+                document.getElementById("payout").innerHTML = "PRIZE: $25,000 a YEAR for LIFE";
+             }
+             // if 5 matches and lucky number 
+             else if (num_matches == 5 && lucky_matches == true){
+                document.getElementById("payout").innerHTML = "PRIZE: $7,000 a WEEK for LIFE";
+             }
+         }
+         //-------------------------------------------------------------------------------------------------------
+         function reset(){
+            // resets the winning numbers textbox after submission
+            document.getElementById("win").value = "";
+            document.getElementById("win").focus();  
+
+            // resets the lucky number textbox after submission
+            document.getElementById("lucky").value = "";
+            document.getElementById("lucky").focus(); 
+         }
+         //-------------------------------------------------------------------------------------------------------
+         function display(){
+            // generate 5 jackpot numbers 
+            winning_nums = generate_nums();
+
+            //generate 1 lucky ball number
+            lucky_num = generate_lucky();
+
+            // sort the 5 jackpot numbers
+            sorted_winning_nums = sort(winning_nums);
+
+            // check if any winning numbers input and jackpot numbers match
+            num_matches = check_matches(sorted_winning_nums);
+
+            // check if lucky ball input and lucky ball number match
+            lucky_matches = check_lucky(lucky_num);
+
+            // begin displaying the following content...
+
+            // your pick of the 5 numbers (sorted), lucky ball and the winning numbers 
+            var unsorted_your_pick = document.getElementById("win").value.split(" "); // your pick (unsorted)
+            var sorted_your_pick = sort(unsorted_your_pick); // your pick (sorted)
+            var jackpot = ""; // holds the winning numbers
+            var jackpot_input_display = ""; // holds your pick numbers
+            var lucky_input_display= document.getElementById("lucky").value; // holds your lucky ball number
+            // to help display your pick by using a for loop
+            var i;
+            for (i = 0; i < sorted_winning_nums.length; i++){
+                jackpot = jackpot + String(sorted_winning_nums[i]) + " "; // winning numbers
+                jackpot_input_display = jackpot_input_display + String(sorted_your_pick[i]) + " "; // your pick
+            }
+            // if the your pick or the lucky number is invalid don't display anything
+            if ((jackpot_input_display == " undefined undefined undefined undefined ") || (lucky_input_display < 1) || (lucky_input_display > 18)){
+                document.getElementById("your_winning_nums").innerHTML = "YOUR PICK: ";
+                document.getElementById("your_lucky_number").innerHTML = "YOUR LUCKY BALL NUMBER: ";
+                document.getElementById("sorted_winning_nums").innerHTML = "JACKPOT NUMBERS: ";
+                document.getElementById("lucky_number").innerHTML = "LUCKY BALL NUMBER: ";
+                document.getElementById("num_of_matches").innerHTML = "NUMBER OF MATCHES: ";
+                document.getElementById("lucky_matches").innerHTML = "LUCKY BALL MATCH?: ";
+            }
+            // if your pick or lucky number is valid display everything
+            else{
+                document.getElementById("your_winning_nums").innerHTML = "YOUR PICK: " + jackpot_input_display;
+                document.getElementById("your_lucky_number").innerHTML = "YOUR LUCKY BALL NUMBER: " + lucky_input_display;
+                document.getElementById("sorted_winning_nums").innerHTML = "JACKPOT NUMBERS: " + jackpot;
+
+                // lucky ball number 
+                document.getElementById("lucky_number").innerHTML = "LUCKY BALL NUMBER: " + lucky_num;
+
+                // how many numbers of the first 5 numbers matched
+                document.getElementById("num_of_matches").innerHTML = "NUMBER OF MATCHES: " + num_matches;
+
+                // whether the lucky ball matched 
+                if (lucky_matches == true){
+                    document.getElementById("lucky_matches").innerHTML = "LUCKY BALL MATCH?: YES!";
+                }
+                else{
+                    document.getElementById("lucky_matches").innerHTML = " LUCKY BALL MATCH?: NO.";
+                }
+
+                // payout for your pick
+                payout(num_matches, lucky_matches);
+            }
+        }
+         //-------------------------------------------------------------------------------------------------------
+         function validate(){
+            // once submitted responses get validated and displayed 
+            document.getElementById("results").innerHTML = "RESULTS";
+            display();
+
+            // resets the textboxes after submission
+            reset();
+        }
+    </script>
+
+    <body>
+         <p> ENTER 5 WINNING NUMBERS (1-48): <input type= "text" id ="win" required> </p>
+         <p> ENTER LUCKY BALL NUMBER (1-18): <input type = "text" id = "lucky" required> </p>
+         <button onclick= "validate()"> SUBMIT</button>
+         <h1 id = "results"></h1>
+         <h2 id = "payout"></h2>
+         <h3 id = "your_winning_nums"></h3>
+         <h3 id = "your_lucky_number"></h3>
+         <h3 id = "sorted_winning_nums"></h3>
+         <h3 id = "lucky_number"></h3>
+         <h3 id = "num_of_matches"></h3>
+         <h3 id = "lucky_matches"></h3>
+    </body>
+</html>
